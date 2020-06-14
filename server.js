@@ -34,7 +34,7 @@ app.use(routes);
 app.use(express.urlencoded({ extended: true })); // support url encoded bodies
 
 // Start the API server
-db.sequelize.sync({ force: false }).then(function () {
+db.sequelize.sync({ force: true }).then(function () {
   app.listen(PORT, function () {
     console.log(
       "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",

@@ -5,7 +5,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React from "react";
 import { Container } from "@material-ui/core";
 import AppBar from './components/AppBar';
-import DevPanel from './components/DevPanel';
+import DevPanel from './pages/DevPanel';
 import { makeStyles } from '@material-ui/core/styles';
 
 

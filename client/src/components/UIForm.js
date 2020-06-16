@@ -1,5 +1,5 @@
 //hooks
-import React, { useState, useContext } from "react";
+import React, { useState,  useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 //form controls and styling
@@ -37,37 +37,43 @@ function UIForm() {
     //Hooks
     const classes = useStyles();
     const { setOperator } = useContext(CreateOperatorContext);
-    const { register, handleSubmit, errors, reset } = useForm();
+    const { register, handleSubmit, errors, getValues } = useForm();
+    // const [noOfInput, setNoOfInput] = useState([]);
+    // const [noOfOutput, setNoOfOutput] = useState([]);
     const [inputNamesList, setInputNamesList] = useState([]);
     const [outputNamesList, setOutputNamesList] = useState([]);
 
-
-    const onSubmit = (data) => {
-        setOperator(data);
+    const onSubmit = (values) => {
+        setOperator(values);
         // console.log(data);
     }
 
-    const handleNoOfInputChange = (event) => {
-        event.preventDefault();
-        let noOfInput = parseInt(event.target.value);
-        var inputJSX = [];
-        for (var i = 0; i < noOfInput; i++) {
-            inputJSX.push(getInputOutputElement("input", i + 1));
-        }
-        console.log(inputJSX);
-        setInputNamesList(inputJSX);
+    const handleChange = () => {
+        console.log(getValues("title"));        
     }
 
-    const handleNoOfOutputChange = (event) => {
+    const handleNoOfInputOrOutputChange = (event) => {
+        console.log(event.target.name);
         event.preventDefault();
-        let noOfOutput = parseInt(event.target.value);
-        var outputJSX = [];
-        for (var i = 0; i < noOfOutput; i++) {
-            outputJSX.push(getInputOutputElement("output", i + 1));
+        var noOfElements = parseInt(event.target.value);
+        var jSX = [];
+        for (var i = 0; i < noOfElements; i++) {
+            jSX.push(getInputOutputElement(event.target.name, i + 1));
         }
-        console.log(outputJSX);
-        setOutputNamesList(outputJSX);
+        event.target.name === "input" ? setInputNamesList(jSX) : setOutputNamesList(jSX);
+        
     }
+
+    // const handleNoOfOutputChange = async (event) => {
+    //     event.preventDefault();
+    //     var noOfOutput = parseInt(event.target.value);
+    //     var outputJSX = [];
+    //     for (var i = 0; i < noOfOutput; i++) {
+    //         outputJSX.push(getInputOutputElement("output", i + 1));
+    //     }
+    //     console.log(outputJSX);
+    //     setOutputNamesList(outputJSX);
+    // }
 
     const getInputOutputElement = (type, slNo) => {
         return (
@@ -80,6 +86,7 @@ function UIForm() {
                 name={type + "_" + slNo}
                 defaultValue={type + "_" + slNo}
                 inputRef={register({ required: true, minLength: 2, maxLength: 12 })}
+                onChange={handleChange}
             />
         )
     }
@@ -101,13 +108,16 @@ function UIForm() {
                             type="text"
                             name="title"
                             inputRef={register({ required: true, minLength: 2, maxLength: 12 })}
+                            onChange={handleChange}
                         />
+
                         <TextField
                             id="description"
                             variant="outlined"
                             label="Description"
                             name="description"
                             inputRef={register}
+                            onChange={handleChange}
                         />
 
                         <FormControl variant="outlined" className={classes.formControl}>
@@ -119,6 +129,7 @@ function UIForm() {
                                 label="Colour Theme"
                                 name="colour"
                                 inputRef={register({ required: true })}
+                                onChange={handleChange}
                             >
                                 <option aria-label="None" value="" />
                                 <option value="lightblue">Light Blue</option>
@@ -138,8 +149,8 @@ function UIForm() {
                                 native
                                 label="Number of Inputs"
                                 inputRef={register}
-                                name="inputs"
-                                onChange={handleNoOfInputChange}
+                                name="input"
+                                onChange={handleNoOfInputOrOutputChange}
                             >
                                 <option value="0">0</option>
                                 <option value="1">1</option>
@@ -159,8 +170,8 @@ function UIForm() {
                                 native
                                 label="Number of Outputs"
                                 inputRef={register}
-                                name="outputs"
-                                onChange={handleNoOfOutputChange}
+                                name="output"
+                                onChange={handleNoOfInputOrOutputChange}
                             >
                                 <option value="0">0</option>
                                 <option value="1">1</option>

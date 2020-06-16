@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         "& > *": {
             margin: theme.spacing(1),
-            marginTop: 20,
+            marginTop: 5,
             display: "flex",
             width: "100%",
         },
@@ -38,6 +38,9 @@ function UIForm() {
     const classes = useStyles();
     const { setOperator } = useContext(CreateOperatorContext);
     const { register, handleSubmit, errors, reset } = useForm();
+    const [inputNamesList, setInputNamesList] = useState([]);
+    const [outputNamesList, setOutputNamesList] = useState([]);
+
 
     const onSubmit = (data) => {
         setOperator(data);
@@ -46,38 +49,50 @@ function UIForm() {
 
     const handleNoOfInputChange = (event) => {
         event.preventDefault();
-        let noOfInput = parseInt(event.target.value)
-        for (var i = 1; i < noOfInput; i++ ) {
-        var inputJSX = getInputOutputElement("input", i)
-            console.log(inputJSX);
-        }        
+        let noOfInput = parseInt(event.target.value);
+        var inputJSX = [];
+        for (var i = 0; i < noOfInput; i++) {
+            inputJSX.push(getInputOutputElement("input", i + 1));
+        }
+        console.log(inputJSX);
+        setInputNamesList(inputJSX);
     }
 
     const handleNoOfOutputChange = (event) => {
         event.preventDefault();
-        console.log(event.target.value);
+        let noOfOutput = parseInt(event.target.value);
+        var outputJSX = [];
+        for (var i = 0; i < noOfOutput; i++) {
+            outputJSX.push(getInputOutputElement("output", i + 1));
+        }
+        console.log(outputJSX);
+        setOutputNamesList(outputJSX);
     }
 
-    const getInputOutputElement = (type, slNo) => { return (
-                            <TextField
-                            id={type + "_" + slNo}
-                            variant="outlined"
-                            label={type.charAt(0).toUpperCase() + "Name"}
-                            type="text"
-                            name={type + "_" + slNo}
-                            inputRef={register({ required: true, minLength: 2, maxLength: 12 })}
-                        />
-                        )}
+    const getInputOutputElement = (type, slNo) => {
+        return (
+            <TextField
+                key={slNo}
+                id={type + "_" + slNo}
+                variant="outlined"
+                label={type + "_" + slNo + " Node Name"}
+                type="text"
+                name={type + "_" + slNo}
+                defaultValue={type + "_" + slNo}
+                inputRef={register({ required: true, minLength: 2, maxLength: 12 })}
+            />
+        )
+    }
 
     return (
         <React.Fragment>
-            <Grid item md={6} sm={12} xs={12}>
+            <Grid item md={8} sm={12} xs={12}>
                 <Paper className={classes.paper}>
                     <h2>Create Operator</h2>
                     <form
                         onSubmit={handleSubmit(onSubmit)}
                         className={classes.root}
-                        style={{ margin: "auto", textAlign: "justify", paddingTop: 100 }}
+                        style={{ margin: "auto", textAlign: "justify", paddingTop: 10 }}
                     >
                         <TextField
                             id="title"
@@ -85,7 +100,7 @@ function UIForm() {
                             label="Operator Title"
                             type="text"
                             name="title"
-                            inputRef={register({ required: true, minLength: 2 })}
+                            inputRef={register({ required: true, minLength: 2, maxLength: 12 })}
                         />
                         <TextField
                             id="description"
@@ -101,9 +116,9 @@ function UIForm() {
                             </InputLabel>
                             <Select
                                 native
-                                label="Colour Theme"                                
+                                label="Colour Theme"
                                 name="colour"
-                                inputRef={register({ required: true})}
+                                inputRef={register({ required: true })}
                             >
                                 <option aria-label="None" value="" />
                                 <option value="lightblue">Light Blue</option>
@@ -157,11 +172,35 @@ function UIForm() {
                             </Select>
                         </FormControl>
 
-                        {errors.name && (
-                        <h4 style={{ color: "red" }}>
-                            USER NAME NEEDS TO BE MINIMUM 4 CHARACTORS
-                        </h4>
+                        <div
+                            className={classes.root}
+                            style={{ margin: "auto", textAlign: "left", paddingTop: 10 }}
+                            id="inputNamesList">
+                            {inputNamesList}
+                        </div>
+                        <div
+                            className={classes.root}
+                            style={{ margin: "auto", textAlign: "left", paddingTop: 10 }}
+                            id="outputNamesList">
+                            {outputNamesList}
+                        </div>
+
+                        {errors.title && (
+                            <h6 style={{ color: "red" }}>
+                                Title value must be between 2 and 12 characters!...
+                            </h6>
                         )}
+                        {(errors.input_1 || errors.input_2 || errors.input_3 || errors.input_4 || errors.input_5 || errors.input_6) && (
+                            <h6 style={{ color: "red" }}>
+                                Input value must be between 2 and 12 characters!...
+                            </h6>
+                        )}
+                        {(errors.output_1 || errors.output_2 || errors.output_3 || errors.output_4 || errors.output_5 || errors.output_6) && (
+                            <h6 style={{ color: "red" }}>
+                                Output value must be between 2 and 12 characters!...
+                            </h6>
+                        )}
+                       
 
                         <Button
                             type="submit"

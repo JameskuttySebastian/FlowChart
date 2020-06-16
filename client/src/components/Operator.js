@@ -17,7 +17,7 @@ function Operator() {
     const classes = useStyles();
     return (
         <React.Fragment>
-                    <Grid item md={6} sm={12} xs={12}>
+                    <Grid item md={4} sm={12} xs={12}>
                         <Paper className={classes.paper}>
 
                             <p>{JSON.stringify(operator)}</p> 

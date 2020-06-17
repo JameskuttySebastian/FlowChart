@@ -19,7 +19,7 @@ function Operator() {
         <React.Fragment>
                     <Grid item md={4} sm={12} xs={12}>
                         <Paper className={classes.paper}>
-
+                        <h2>View Operator</h2>
                             <p>{JSON.stringify(operator)}</p> 
                             {console.log(operator)     }                    
                             

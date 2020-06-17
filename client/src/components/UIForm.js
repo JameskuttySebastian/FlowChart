@@ -1,5 +1,5 @@
 //hooks
-import React, { useState,  useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 //form controls and styling
@@ -31,49 +31,76 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-
 function UIForm() {
     //Hooks
     const classes = useStyles();
     const { setOperator } = useContext(CreateOperatorContext);
-    const { register, handleSubmit, errors, getValues } = useForm();
-    // const [noOfInput, setNoOfInput] = useState([]);
-    // const [noOfOutput, setNoOfOutput] = useState([]);
+    const { register, handleSubmit, errors, getValues, reset, setValue } = useForm();
+
     const [inputNamesList, setInputNamesList] = useState([]);
     const [outputNamesList, setOutputNamesList] = useState([]);
 
-    const onSubmit = (values) => {
+    //for creating the object
+    let operator = {
+        top: 20,
+        left: 20
+    }
+    let headerProperties = {};
+
+    let noOfInput = 0;
+    let noOfOutput = 0;
+
+
+    const onSubmit = (values, e) => {
+
+        //first need to save the data
+
         setOperator(values);
-        // console.log(data);
+        reset();
+        setValue([
+            { colour: "" },
+            { input: 0 },
+            { output: 0 },
+        ])
+        setInputNamesList([]);
+        setOutputNamesList([]);
+        //   setOperator("");
     }
 
     const handleChange = () => {
-        console.log(getValues("title"));        
+        headerProperties = {
+            properties: {
+                title: getValues("title"),
+                body: getValues("description"),
+                class: getValues("colour"),
+            }
+        }
+        // operator = { ...operator, ...headerProperties }
+        // console.log(JSON.stringify(operator));
     }
 
-    const handleNoOfInputOrOutputChange = (event) => {
-        console.log(event.target.name);
+    const handleIOChange = () => {
+        // console.log(noOfInput, noOfOutput);
+        for (let i = 0; i < noOfInput; i++) {
+            console.log({["input_" + (i+1)] : getValues("input_" + (i+1) )})
+        }
+    
+        for (let j = 0; j < noOfOutput; j++) {
+            console.log({["output_" + (j+1)] : getValues("output_" + (j+1) )})
+        }
+    }
+
+    const handleNoOfInputOrOutputChange = async (event) => {
         event.preventDefault();
+        event.target.name === "input" ? noOfInput = parseInt(event.target.value) : noOfOutput = parseInt(event.target.value);        
+        console.log(noOfInput, noOfOutput);
         var noOfElements = parseInt(event.target.value);
         var jSX = [];
         for (var i = 0; i < noOfElements; i++) {
             jSX.push(getInputOutputElement(event.target.name, i + 1));
         }
-        event.target.name === "input" ? setInputNamesList(jSX) : setOutputNamesList(jSX);
-        
+        event.target.name === "input" ?  setInputNamesList(jSX) :  setOutputNamesList(jSX);      
     }
-
-    // const handleNoOfOutputChange = async (event) => {
-    //     event.preventDefault();
-    //     var noOfOutput = parseInt(event.target.value);
-    //     var outputJSX = [];
-    //     for (var i = 0; i < noOfOutput; i++) {
-    //         outputJSX.push(getInputOutputElement("output", i + 1));
-    //     }
-    //     console.log(outputJSX);
-    //     setOutputNamesList(outputJSX);
-    // }
 
     const getInputOutputElement = (type, slNo) => {
         return (
@@ -86,7 +113,7 @@ function UIForm() {
                 name={type + "_" + slNo}
                 defaultValue={type + "_" + slNo}
                 inputRef={register({ required: true, minLength: 2, maxLength: 12 })}
-                onChange={handleChange}
+                onChange={handleIOChange}
             />
         )
     }
@@ -211,7 +238,7 @@ function UIForm() {
                                 Output value must be between 2 and 12 characters!...
                             </h6>
                         )}
-                       
+
 
                         <Button
                             type="submit"

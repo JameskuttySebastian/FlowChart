@@ -2,6 +2,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
+
 //form controls and styling
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -37,18 +38,46 @@ function UIForm() {
     const { setOperator } = useContext(CreateOperatorContext);
     const { register, handleSubmit, errors, getValues, reset, setValue } = useForm();
 
+    const [header, setHeader] = useState({ title: "", body: "", class: "" });
+    const [inputObjList, setInputObjList] = useState({});
+    const [outputObjList, setOutputObjList] = useState({});
+
     const [inputNamesList, setInputNamesList] = useState([]);
     const [outputNamesList, setOutputNamesList] = useState([]);
 
-    //for creating the object
-    let operator = {
-        top: 20,
-        left: 20
-    }
-    let headerProperties = {};
 
-    let noOfInput = 0;
-    let noOfOutput = 0;
+
+
+    // let mainProperties = {
+    //     title: '',
+    //     body: '',
+    //     class: '',
+    // }
+
+
+    // useEffect(() => {
+    //     mainProperties = {
+    //         ...mainProperties,
+    //         title: getValues("title"),
+    //         body: getValues("body"),
+    //         colour: getValues("class"),
+    //     }
+    //     console.log(JSON.stringify(mainProperties));
+    //     setHeaderChange(false);
+    // }, [headerChange])
+
+    useEffect(() => {
+        inputObjArray = [...inputObjArray];
+        console.log(JSON.stringify(inputObjArray));
+        setInputChange(false);
+    }, [inputChange])
+
+    // useEffect(() => {
+    //     console.log(JSON.stringify(header));
+    // }, [header])
+
+
+
 
 
     const onSubmit = (values, e) => {
@@ -67,46 +96,44 @@ function UIForm() {
         //   setOperator("");
     }
 
-    const handleChange = () => {
-        headerProperties = {
-            properties: {
-                title: getValues("title"),
-                body: getValues("description"),
-                class: getValues("colour"),
-            }
-        }
-        // operator = { ...operator, ...headerProperties }
-        // console.log(JSON.stringify(operator));
+    //Track the header change
+    const handleChange = (e) => {
+        var newObj = { [e.target.name]: e.target.value };
+        setHeader({ ...header, ...newObj })
     }
 
-    const handleIOChange = () => {
-        // console.log(noOfInput, noOfOutput);
-        for (let i = 0; i < noOfInput; i++) {
-            console.log({["input_" + (i+1)] : getValues("input_" + (i+1) )})
-        }
-    
-        for (let j = 0; j < noOfOutput; j++) {
-            console.log({["output_" + (j+1)] : getValues("output_" + (j+1) )})
-        }
+
+    const handleIOChange = (e) => {
+        
     }
 
+    //Create inputs and outputs dynamically
     const handleNoOfInputOrOutputChange = async (event) => {
         event.preventDefault();
-        event.target.name === "input" ? noOfInput = parseInt(event.target.value) : noOfOutput = parseInt(event.target.value);        
-        console.log(noOfInput, noOfOutput);
-        var noOfElements = parseInt(event.target.value);
-        var jSX = [];
+        let type = event.target.name;
+        let noOfElements = parseInt(event.target.value);
+        let jSX = [];
         for (var i = 0; i < noOfElements; i++) {
-            jSX.push(getInputOutputElement(event.target.name, i + 1));
+            jSX.push(getInputOutputElement(type, (i + 1)));
+            let operObj = {
+                [type + "_" + i + 1]: {
+                    label: type + "_" + i + 1,
+                    multipleLinks: true,
+                },
+            };
+            type === "input" ? inputObjArray.push(operObj) : outputObjArray.push(operObj);
         }
-        event.target.name === "input" ?  setInputNamesList(jSX) :  setOutputNamesList(jSX);      
+        // Assign to hook based on type
+        type === "input" ? setInputNamesList(jSX) : setOutputNamesList(jSX);
+        console.log(inputObjArray);
+        console.log(outputObjArray);
     }
 
     const getInputOutputElement = (type, slNo) => {
         return (
             <TextField
                 key={slNo}
-                id={type + "_" + slNo}
+                id={type}
                 variant="outlined"
                 label={type + "_" + slNo + " Node Name"}
                 type="text"
@@ -115,6 +142,7 @@ function UIForm() {
                 inputRef={register({ required: true, minLength: 2, maxLength: 12 })}
                 onChange={handleIOChange}
             />
+
         )
     }
 
@@ -139,10 +167,10 @@ function UIForm() {
                         />
 
                         <TextField
-                            id="description"
+                            id="body"
                             variant="outlined"
                             label="Description"
-                            name="description"
+                            name="body"
                             inputRef={register}
                             onChange={handleChange}
                         />
@@ -152,9 +180,10 @@ function UIForm() {
                                 Colour Theme
                             </InputLabel>
                             <Select
+                                id="class"
                                 native
                                 label="Colour Theme"
-                                name="colour"
+                                name="class"
                                 inputRef={register({ required: true })}
                                 onChange={handleChange}
                             >
@@ -172,6 +201,7 @@ function UIForm() {
                                 No of Inputs
                             </InputLabel>
                             <Select
+                                id="input"
                                 native
                                 label="Number of Inputs"
                                 inputRef={register}
@@ -193,6 +223,7 @@ function UIForm() {
                                 No of Outputs
                             </InputLabel>
                             <Select
+                                id="output"
                                 native
                                 label="Number of Outputs"
                                 inputRef={register}

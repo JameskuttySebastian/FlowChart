@@ -21,7 +21,7 @@ function Operator() {
                         <Paper className={classes.paper}>
                         <h2>View Operator</h2>
                             <p>{JSON.stringify(operator)}</p> 
-                            {console.log(operator)     }                    
+                    
                             
                         </Paper>
                     </Grid>

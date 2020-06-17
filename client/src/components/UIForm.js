@@ -39,61 +39,40 @@ function UIForm() {
     const { register, handleSubmit, errors, getValues, reset, setValue } = useForm();
 
     const [header, setHeader] = useState({ title: "", body: "", class: "" });
-    const [inputObjList, setInputObjList] = useState({});
-    const [outputObjList, setOutputObjList] = useState({});
+    const [inputObjList, setInputObjList] = useState([]);
+    const [outputObjList, setOutputObjList] = useState([]);
 
     const [inputNamesList, setInputNamesList] = useState([]);
     const [outputNamesList, setOutputNamesList] = useState([]);
 
-
-
-
-    // let mainProperties = {
-    //     title: '',
-    //     body: '',
-    //     class: '',
-    // }
-
-
-    // useEffect(() => {
-    //     mainProperties = {
-    //         ...mainProperties,
-    //         title: getValues("title"),
-    //         body: getValues("body"),
-    //         colour: getValues("class"),
-    //     }
-    //     console.log(JSON.stringify(mainProperties));
-    //     setHeaderChange(false);
-    // }, [headerChange])
+   
 
     useEffect(() => {
-        inputObjArray = [...inputObjArray];
-        console.log(JSON.stringify(inputObjArray));
-        setInputChange(false);
-    }, [inputChange])
-
-    // useEffect(() => {
-    //     console.log(JSON.stringify(header));
-    // }, [header])
+        // getInputOutputObjList("input", "inputNameList");
+        // getInputOutputObjList("output", "outputNameList");  
+        console.log(header, inputObjList,outputObjList ) 
+    }, [ header, inputObjList,outputObjList])
 
 
-
-
-
-    const onSubmit = (values, e) => {
-
-        //first need to save the data
-
+    const onSubmit = (values) => {
         setOperator(values);
+    }
+
+    const onSave = (values) => {
+        onSubmit();
         reset();
         setValue([
             { colour: "" },
             { input: 0 },
             { output: 0 },
         ])
+        setHeader({});
+        setInputObjList([]);
+        setOutputObjList([]);
         setInputNamesList([]);
         setOutputNamesList([]);
-        //   setOperator("");
+        setOperator({});
+        // window.location.reload(false);
     }
 
     //Track the header change
@@ -102,9 +81,20 @@ function UIForm() {
         setHeader({ ...header, ...newObj })
     }
 
+    const getInputOutputObjList = (type, divID) => {
+        let nodeObjectList = [];
+        var nameCount = document.getElementById(divID).childElementCount;
+        for (var i = 0; i < nameCount; i++) {
+            var nodeObject = { [type + "_" + (i + 1)]: getValues(type + "_" + (i + 1)) };
+            nodeObjectList.push(nodeObject);
+        }
+        type === "input" ? setInputObjList(nodeObjectList) : setOutputObjList(nodeObjectList);
+    }
+
 
     const handleIOChange = (e) => {
-        
+        let type = e.target.id;
+        type === "input" ? getInputOutputObjList(type, "inputNameList") : getInputOutputObjList(type, "outputNameList");
     }
 
     //Create inputs and outputs dynamically
@@ -113,20 +103,17 @@ function UIForm() {
         let type = event.target.name;
         let noOfElements = parseInt(event.target.value);
         let jSX = [];
+        let nodeObjectList = [];
         for (var i = 0; i < noOfElements; i++) {
             jSX.push(getInputOutputElement(type, (i + 1)));
-            let operObj = {
-                [type + "_" + i + 1]: {
-                    label: type + "_" + i + 1,
-                    multipleLinks: true,
-                },
-            };
-            type === "input" ? inputObjArray.push(operObj) : outputObjArray.push(operObj);
         }
-        // Assign to hook based on type
+        // Assign to hook based on type          
+        // assigning JSX string
         type === "input" ? setInputNamesList(jSX) : setOutputNamesList(jSX);
-        console.log(inputObjArray);
-        console.log(outputObjArray);
+
+        // assigning initial object value    
+        type === "input" ? getInputOutputObjList(type, "inputNameList") : getInputOutputObjList(type, "outputNameList");  
+
     }
 
     const getInputOutputElement = (type, slNo) => {
@@ -152,7 +139,7 @@ function UIForm() {
                 <Paper className={classes.paper}>
                     <h2>Create Operator</h2>
                     <form
-                        onSubmit={handleSubmit(onSubmit)}
+                        // onSubmit={handleSubmit(onSubmit)}
                         className={classes.root}
                         style={{ margin: "auto", textAlign: "justify", paddingTop: 10 }}
                     >
@@ -243,13 +230,13 @@ function UIForm() {
                         <div
                             className={classes.root}
                             style={{ margin: "auto", textAlign: "left", paddingTop: 10 }}
-                            id="inputNamesList">
+                            id="inputNameList">
                             {inputNamesList}
                         </div>
                         <div
                             className={classes.root}
                             style={{ margin: "auto", textAlign: "left", paddingTop: 10 }}
-                            id="outputNamesList">
+                            id="outputNameList">
                             {outputNamesList}
                         </div>
 
@@ -271,15 +258,27 @@ function UIForm() {
 
 
                         <Button
-                            type="submit"
+                            type="button"
+                            variant="contained"
+                            color="default"
+                            name="button"
+                            style={{ marginTop: 10 }}
+                            onClick={handleSubmit(onSubmit)}
+                        >
+                            APPLY
+                        </Button>
+                        <Button
+                            type="button"
                             variant="contained"
                             color="primary"
-                            name="submit"
-                            style={{ marginTop: 50 }}
+                            name="button"
+                            style={{ marginTop: 10 }}
+                            onClick={handleSubmit(onSave)}
                         >
-                            SUBMIT
+                            SAVE
                         </Button>
                     </form>
+
                 </Paper>
             </Grid>
         </React.Fragment>

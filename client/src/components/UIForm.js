@@ -163,7 +163,6 @@ function UIForm() {
                                 <option value="lightgreen">Light Green</option>
                                 <option value="lightcyan">Light Cyan</option>
                                 <option value="lightcoral">Light Coral</option>
-                                <option value="lightgrey">Light Grey</option>
                                 <option value="lightsalmon">Light Salmon</option>
                             </Select>
                         </FormControl>

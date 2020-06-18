@@ -1,0 +1,24 @@
+.lightgray, .lightgray .flowchart-operator-title{
+    background-color: lightgray;
+}
+
+.lightblue, .lightblue .flowchart-operator-title{
+    background-color: lightblue;
+}
+
+.lightgreen, .lightgreen .flowchart-operator-title{
+    background-color: lightgreen;
+}
+
+.lightcyan, .lightcyan .flowchart-operator-title{
+    background-color: lightcyan;
+}
+
+.lightcoral, .lightcoral .flowchart-operator-title{
+    background-color: lightcoral;
+}
+
+.lightsalmon, .lightsalmon .flowchart-operator-title{
+    background-color: lightsalmon;
+}
+

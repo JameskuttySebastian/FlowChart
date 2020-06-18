@@ -39,7 +39,7 @@ function UIForm() {
     const { setOperator } = useContext(CreateOperatorContext);
     const { register, handleSubmit, errors, getValues, reset, setValue } = useForm();
 
-    const [header, setHeader] = useState({ title: "", body: "", class: "" });
+    const [header, setHeader] = useState({ title: "", body: "", class: "lightgray" });
     const [inputObjList, setInputObjList] = useState([]);
     const [outputObjList, setOutputObjList] = useState([]);
 

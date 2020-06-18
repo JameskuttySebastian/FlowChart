@@ -1,4 +1,7 @@
 import jQuery from 'jquery';
+import $ from 'jquery';
+import 'jquery-ui';
+
 if (!('remove' in Element.prototype)) {
     Element.prototype.remove = function() {
         if (this.parentNode) {
@@ -363,7 +366,7 @@ jQuery(function ($) {
             var fromSubConnector = subConnectors[0];
             var toSubConnector = subConnectors[1];
 
-            var color = this.getLinkMainColor(linkId);
+            // var color = this.getLinkMainColor(linkId);
 
             var fromOperator = this.data.operators[fromOperatorId];
             var toOperator = this.data.operators[toOperatorId];
@@ -733,7 +736,7 @@ jQuery(function ($) {
 
         _connectorClicked: function (operator, connector, subConnector, connectorCategory) {
             if (connectorCategory == 'outputs') {
-                var d = new Date();
+                // var d = new Date();
                 // var currentTime = d.getTime();
                 this.lastOutputConnectorClicked = {
                     operator: operator,

@@ -126,7 +126,6 @@ function UIForm() {
         let type = event.target.name;
         let noOfElements = parseInt(event.target.value);
         let jSX = [];
-        let nodeObjectList = [];
         for (var i = 0; i < noOfElements; i++) {
             jSX.push(getInputOutputElement(type, (i + 1)));
         }

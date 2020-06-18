@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
+        height: 620,
     },
 }));
 
@@ -45,14 +46,36 @@ function UIForm() {
     const [inputNamesList, setInputNamesList] = useState([]);
     const [outputNamesList, setOutputNamesList] = useState([]);
 
-   
+
 
     useEffect(() => {
-        // getInputOutputObjList("input", "inputNameList");
-        // getInputOutputObjList("output", "outputNameList");  
-        console.log(header, inputObjList,outputObjList ) 
-    }, [ header, inputObjList,outputObjList])
+        var inputObjs = getInputObjects(inputObjList);
+        var outputObjs = getInputObjects(outputObjList);
+        var properties = {...header, inputObjs, outputObjs};
+        var data = {
+            operators: {
+                operator1: {
+                    top: 20,
+                    left: 20,
+                    properties: properties,
+                },
+            },
+        }
+        setOperator(data);
 
+    }, [header, inputObjList, outputObjList])
+
+    //getting input and output object list
+    const getInputObjects = (iOObjList) => {
+        let objList = {}
+        // console.log(vars);
+        for(var i=0; i<iOObjList.length; i++){
+            var curObj = iOObjList[i];            
+            var key = Object.keys(curObj)[0];
+            objList = {...objList, [key] : { label: curObj[key] , multipleLinks: true,}} 
+        }
+        return objList;
+    }
 
     const onSubmit = (values) => {
         setOperator(values);
@@ -112,7 +135,7 @@ function UIForm() {
         type === "input" ? setInputNamesList(jSX) : setOutputNamesList(jSX);
 
         // assigning initial object value    
-        type === "input" ? getInputOutputObjList(type, "inputNameList") : getInputOutputObjList(type, "outputNameList");  
+        type === "input" ? getInputOutputObjList(type, "inputNameList") : getInputOutputObjList(type, "outputNameList");
 
     }
 
@@ -125,7 +148,7 @@ function UIForm() {
                 label={type + "_" + slNo + " Node Name"}
                 type="text"
                 name={type + "_" + slNo}
-                defaultValue={type + "_" + slNo}
+                placeholder={type + "_" + slNo}
                 inputRef={register({ required: true, minLength: 2, maxLength: 12 })}
                 onChange={handleIOChange}
             />
@@ -257,7 +280,7 @@ function UIForm() {
                         )}
 
 
-                        <Button
+                        {/* <Button
                             type="button"
                             variant="contained"
                             color="default"
@@ -266,7 +289,7 @@ function UIForm() {
                             onClick={handleSubmit(onSubmit)}
                         >
                             APPLY
-                        </Button>
+                        </Button> */}
                         <Button
                             type="button"
                             variant="contained"

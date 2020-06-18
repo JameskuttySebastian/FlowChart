@@ -1,0 +1,35 @@
+{
+    "development": {
+      "username": "sa",
+      "password": "p@ssw0rd",
+      "database": "FlowChart",
+      "host": "localhost",
+      "port":49730,
+      "dialect": "mssql",
+      "dialectOptions":{
+        "instanceName": "JS",
+        "trustedConnection": true      
+      }      
+    },
+    "test": {
+        "username": "sa",
+        "password": "p@ssw0rd",
+        "database": "FlowChart",
+        "host": "127.0.0.1",
+        "dialect": "mssql",
+        "dialectOptions":{
+          "instanceName": "DESKTOP-73D41H0/JS"
+        }  
+    },
+    "production": {
+        "username": "sa",
+        "password": "p@ssw0rd",
+        "database": "FlowChart",
+        "host": "127.0.0.1",
+        "dialect": "mssql",
+        "dialectOptions":{
+          "instanceName": "DESKTOP-73D41H0/JS"
+        }  
+    }
+  }
+  
